@@ -1,7 +1,6 @@
 // testing for phaser
 
-window.createGame = function (ele, scope, players, mapId, injector) {
-
+let createGame = function (ele, scope, players, mapId, injector) {
   var game = new Phaser.Game(960, 600, Phaser.CANVAS, 'gameCanvas', { preload: preload, create: create, update: update, render: render })
   // The walk through: Make new pseudo-iframe object. The world and camera have a width, height of 960, 600
   // My parent div is phaser-example
@@ -47,7 +46,7 @@ window.createGame = function (ele, scope, players, mapId, injector) {
     layer3 = map.createLayer('Bounds')
     layer = map.createLayer('Ground')
     layer2 = map.createLayer('Bunker')
-	  layer2
+    layer2
     layer4 = map.createLayer('Interactive')
     // Add all the elements we preloaded.
     // The tilemap has layers - the bunker, its bg, and what the player collides with - check out Tiled
