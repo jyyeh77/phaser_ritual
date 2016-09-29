@@ -99,6 +99,8 @@ window.createGame = function (ele, scope, players, mapId, injector) {
     cursors = game.input.keyboard.createCursorKeys()
     // Create input keys - aka ASCII abstraction - removes their ability to be used by DOM
     game.inputEnabled = true
+
+    // TODO: PUT ANY FUNCTION HERE - will activate on any click of wall
     game.input.onDown.add(tryBuild, this)
     // OKAY - input enabled is 1/2 things for touch enabled. May not work yet.
     // game.input = mouse
