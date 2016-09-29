@@ -195,7 +195,14 @@ input {
     background-color: #37474F;
 }
 
+#gameContainer {
+    height: 1000px;
+    width: 100%;
+}
+
 #content {
+    width: 100%;
+    height: 1000px;
     overflow-x: hidden;
     color: #CFD8DC;
     padding-top: 2em;
