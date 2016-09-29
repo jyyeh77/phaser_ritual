@@ -1,4 +1,4 @@
-app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, $state) {
+app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, $state, GameFactory) {
   return {
     restrict: 'E',
     scope: {},
@@ -26,7 +26,7 @@ app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, 
       var setUser = function () {
         AuthService.getLoggedInUser().then(function (user) {
           scope.user = user
-          if (user) $state.go('master.navbar.tasks')
+          GameFactory.getUserState()
         })
       }
 

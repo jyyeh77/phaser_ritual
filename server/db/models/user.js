@@ -2,8 +2,8 @@
 var crypto = require('crypto')
 var _ = require('lodash')
 var Sequelize = require('sequelize')
-
 var db = require('../_db')
+var GameState = require('./gamestate')
 
 module.exports = db.define('user', {
   email: {
@@ -50,6 +50,10 @@ module.exports = db.define('user', {
         user.salt = user.Model.generateSalt()
         user.password = user.Model.encryptPassword(user.password, user.salt)
       }
+    },
+    afterCreate: function (user) {
+      return GameState.create({})
+        .then(defaultState => defaultState.setUser(user))
     }
   }
 })

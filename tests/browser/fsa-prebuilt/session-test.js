@@ -25,12 +25,12 @@ describe('Session Service', function () {
   describe('create method', function () {
     it('should when called with id and user arguments' +
       'set the id and user to session', function () {
-        var id = 'testId'
-        var user = {}
-        Session.create(id, user)
-        expect(Session.user).to.be.equal(user)
-        expect(Session.id).to.be.equal(id)
-      })
+      var id = 'testId'
+      var user = {}
+      Session.create(id, user)
+      expect(Session.user).to.be.equal(user)
+      expect(Session.id).to.be.equal(id)
+    })
   })
 
   describe('destroy method', function () {
