@@ -1,0 +1,108 @@
+<div id="signUpSettingsDiv">
+    <h3 id="content-header">Your Tasks</h3>
+    <hr id="content-hr"></hr>
+    <alert type="danger" ng-show="customError && showTask">
+        {{ errormsg[0] }}
+        <span ng-show="errormsg.length > 1">{{ errormsg[1] }}</span>
+    </alert>
+    <alert type="danger" ng-show="error && showTask">
+        {{ error }}
+    </alert>
+    <div class="row" id="task-viewer" ng-show="showTask">
+        <div class="col-xs-1">
+        </div>
+        <div class="col-xs-10">
+            <div id="task-container">
+                <div class="row" style="height: 1em;">
+                </div>
+                <div class="row" id="task-creation-interface">
+                    <div class="col-xs-1">
+                    </div>
+                    <div class="col-xs-10">
+                        <div id="task-creation-inputs">
+                            <form id="task-form" name="taskForm" ng-submit="taskForm.$valid && createTask(task)">
+                                <label for="task-title">I need to ... </label>
+                                <input type="text" name="title" ng-model="task.title" class="form-control" id="task-title" placeholder="An Activity" ng-minlength='1' ng-required='true'>
+                                <label for="task-time">at </label>
+                                <div id="time-task-container">
+                                    <input type="number" name="hour" ng-model="task.hour" class="form-control" id="task-hour" placeholder="HH" ng-minlength='1' ng-maxlength='2' ng-required='true' min='1' max='12'>
+                                    <span id="task-semicolon">:</span>
+                                    <input type="number" name="minute" ng-model="task.minute" class="form-control" id="task-minute" placeholder="MM" ng-minlength='1' ng-maxlength='2' ng-required='true' min='0' max='59'>
+                                    <select id="task-ampm" ng-init="task.ampm = task.ampm || 'AM'" ng-model="task.ampm" class="form-control">
+                                        <option value="AM">AM</option>
+                                        <option value="PM">PM</option>
+                                    </select>
+                                </div>
+                                <div style="width: 1px; clear: both">
+                                </div>
+                               <label style="margin-top: 0.5em;" for="task-length">for </label>
+                               <div id="time-length-container">
+                                    <input type="number" name="lhour" ng-model="task.lhour" class="form-control" id="task-lhour" placeholder="HH" ng-minlength='1' ng-maxlength='2' ng-required='true' ng-min='0' ng-max='11'>
+                                    <span id="task-lsemicolon">:</span>
+                                    <input type="number" name="lminute" ng-model="task.lminute" class="form-control" id="task-lminute" placeholder="MM" ng-minlength='1' ng-maxlength='2' ng-required='true' ng-min='0' ng-max='59'>
+                                </div>
+                                <div style="width: 1px; clear: both">
+                                </div>
+                                <br>
+                                <button id="submitForm" type="submit" class="btn btn-default" ng-disabled="taskForm.$invalid || checkFields()">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-xs-1">
+                    </div>
+                </div>
+                <div class="row" style="height: 1em;">
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-1">
+        </div>
+    </div>
+    <div class="row" id="task-viewer" ng-show="!showTask">
+        <div class="col-xs-1">
+        </div>
+        <div class="col-xs-10">
+            <div id="task-container">
+                <div class="row" style="height: 1em;">
+                </div>
+                <div class="row" ng-repeat="task in tasks">
+                    <div id="taskdir-container">
+                        <div class="col-xs-1">
+                        </div>
+                        <task class="col-xs-10" task="task"></task>
+                        <div class="col-xs-1">
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="height: 1em;">
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-1">
+        </div>
+    </div>
+    <div class="row" id="task-creator">
+        <div class="col-xs-3">
+        </div>
+        <div class="col-xs-6">
+            <div ng-show="!showTask">
+                <button class="btn" id="schedule-task-btn" ng-click="toggleCreateTask()">
+                Schedule a New Task
+                </button>
+                <br>
+            </div>
+            <div ng-show="showTask">
+                <button class="btn" id="schedule-task-btn" ng-click="toggleCreateTask()">
+                View Todays Schedule
+                </button>
+                <br>
+            </div>
+            <div ng-show="showTask" id="create-task-interface">
+                <div id="create-task-interface">
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-3">
+        </div>
+    </div>
+</div>
