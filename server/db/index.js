@@ -3,9 +3,6 @@ const db = require('./_db')
 module.exports = db
 
 const User = require('./models/user')
-const Todo = require('./models/todo')
-const Message = require('./models/messages')
+const GameState = require('./models/gamestate')
 
-Todo.belongsTo(User)
-User.hasMany(Todo)
-Todo.hasMany(Message)
+GameState.belongsTo(User)

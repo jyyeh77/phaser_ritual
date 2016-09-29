@@ -21,7 +21,7 @@ module.exports = function (app, db) {
   }
 
   var verifyCallback = function (token, tokenSecret, profile, done) {
-    UserModel.findOne({
+    User.findOne({
       where: {
         twitter_id: profile.id
       }

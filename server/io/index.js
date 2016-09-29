@@ -8,7 +8,7 @@ module.exports = function (server) {
   io = socketio(server)
 
   io.on('connection', function () {
-    console.log('connection established')
+    // Now have access to socket, wowzers!
   })
 
   return io

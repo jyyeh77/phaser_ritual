@@ -5,7 +5,7 @@ var passport = require('passport')
 var SequelizeStore = require('connect-session-sequelize')(session.Store)
 
 var ENABLED_AUTH_STRATEGIES = [
-  'local',
+  'local'
 // 'twitter',
 // 'facebook',
 // 'google'

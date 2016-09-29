@@ -7,17 +7,8 @@
  */
 
 module.exports = {
-  'DATABASE_URI': process.env.DATABASE_URL,
+  'DATABASE_URI': process.env.DATABASE_URI,
   'SESSION_SECRET': process.env.SESSION_SECRET,
-  NUMBERS: {
-    NUM_1: process.env.USER_NUM_1,
-    NUM_2: process.env.USER_NUM_2
-  },
-  'TWILIO': {
-    clientID: process.env.TWILIO_ACCOUNT_SID,
-    clientSecret: process.env.TWILIO_AUTH_TOKEN,
-    callbackNumber: process.env.TWILIO_PHONE_NUMBER
-  },
   'TWITTER': {
     'consumerKey': process.env.TWITTER_CONSUMER_KEY,
     'consumerSecret': process.env.TWITTER_CONSUMER_SECRET,
@@ -33,5 +24,5 @@ module.exports = {
     'clientSecret': process.env.GOOGLE_CLIENT_SECRET,
     'callbackURL': process.env.GOOGLE_CALLBACK_URL
   },
-  'LOGGING': true
+  'LOGGING': false
 }
