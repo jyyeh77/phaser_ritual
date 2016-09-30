@@ -1,10 +1,11 @@
 // testing for phaser
 
 window.createGame = function (ele, scope, players, mapId, injector) {
+  console.log('GETTING CALLED!')
   // let height = parseInt(ele.css('height'), 10)
   // let width = parseInt(ele.css('width'), 10)
 
-  var game = new Phaser.Game(960, 600, Phaser.CANVAS, 'gameCanvas', { preload: preload, create: create, update: update, render: render })
+  var game = new Phaser.Game(960, 600, Phaser.CANVAS, 'game-canvas', { preload: preload, create: create, update: update, render: render })
   // The walk through: Make new pseudo-iframe object. The world and camera have a width, height of 960, 600
   // My parent div is phaser-example
   // My preload function is titled preload, create: create, update: update, and render: render
@@ -544,16 +545,19 @@ window.createGame = function (ele, scope, players, mapId, injector) {
 // custom directive to link phaser object to angular
 
 app.directive('gameCanvas', function ($injector) {
-  let linkFn = function (scope, ele, attrs) {
-    window.createGame(ele, scope, scope.players, scope.mapId, $injector)
-  }
-
   return {
     scope: {
-      players: '=',
+      data: '=',
       mapId: '='
     },
-    template: '<div id="gameCanvas"></div>',
-    link: linkFn
+    template: '<div id="game-canvas"></div>',
+    link: function (scope, ele, attrs) {
+      console.log('inside link function: ', scope.data)
+
+      // TODO: FIX THIS FOR REFRESHES!
+      if (scope.data) {
+        window.createGame(ele, scope, scope.players, scope.mapId, $injector)
+      }
+    }
   }
 })

@@ -5,7 +5,8 @@ app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, 
     templateUrl: 'js/common/directives/navbar/navbar.html',
     link: function (scope) {
       scope.items = [
-        {label: 'Account Settings', state: 'master.navbar.signup-settings', auth: true},
+        {label: 'Game', state: 'master.navbar.game', auth: true},
+        {label: 'Account', state: 'master.navbar.signup-settings', auth: true},
         {label: 'Menu', state: 'master.navbar.menu', auth: true}
       ]
 
@@ -26,7 +27,12 @@ app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, 
       var setUser = function () {
         AuthService.getLoggedInUser().then(function (user) {
           scope.user = user
+          console.log('set user getting called!', user)
+          // get game state associated with user
           GameFactory.getUserState()
+
+          // only allows signed-in users to view game page
+          $rootScope.$broadcast('showGame')
         })
       }
 
