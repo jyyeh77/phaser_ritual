@@ -1,4 +1,4 @@
-app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, $state, GameFactory) {
+app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, $state, GameViewFactory) {
   return {
     restrict: 'E',
     scope: {},
@@ -12,7 +12,7 @@ app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, 
       // displaying in-game menu
       scope.showMenu = () => {
         console.log('CALLING SHOW MENU!')
-        GameFactory.showMenu()
+        GameViewFactory.showMenu()
       }
 
       scope.user = null
@@ -34,7 +34,7 @@ app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, 
           scope.user = user
           console.log('set user getting called!', user)
           // get game state associated with user
-          GameFactory.getUserState()
+          GameViewFactory.getUserState()
         })
       }
 

@@ -1,12 +1,12 @@
 // for retrieving game state
 
-app.factory('GameFactory', function ($http) {
-  let GameFactory = {}
+app.factory('GameViewFactory', function ($http) {
+  let GameViewFactory = {}
   let gameState = null
   let showMenu = false
 
   // gets game state object from db upon user login
-  GameFactory.getUserState = () => {
+  GameViewFactory.getUserState = () => {
     if (!gameState) {
       return $http.get('/api/gamestate')
         .then(res => {
@@ -19,16 +19,17 @@ app.factory('GameFactory', function ($http) {
   }
 
   // on logout, reset gameState
-  GameFactory.clearUserState = () => {
+  GameViewFactory.clearUserState = () => {
     gameState = null
   }
 
   // displaying/hiding in-game menu
-  GameFactory.showMenu = () => {
+  GameViewFactory.showMenu = () => {
     showMenu = !showMenu
   }
 
-  GameFactory.getMenuView = () => showMenu
+  // return boolean to show/hide in-game menu - used in GameController
+  GameViewFactory.getMenuView = () => showMenu
 
-  return GameFactory
+  return GameViewFactory
 })

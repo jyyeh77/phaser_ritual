@@ -1,6 +1,6 @@
 // testing for phaser
 
-window.createGame = function (ele, scope, players, mapId, injector) {
+window.createGame = function (ele, scope, players, mapId, injector, MenuFactory) {
   console.log('GETTING CALLED!')
   // let height = parseInt(ele.css('height'), 10)
   // let width = parseInt(ele.css('width'), 10)
@@ -9,6 +9,13 @@ window.createGame = function (ele, scope, players, mapId, injector) {
   // The walk through: Make new pseudo-iframe object. The world and camera have a width, height of 960, 600
   // My parent div is phaser-example
   // My preload function is titled preload, create: create, update: update, and render: render
+
+  // adds floors upon press of add floor option in game menu
+  scope.$watch(MenuFactory.getFloors, (floorVal) => {
+    if (floorVal > 0) {
+      tryBuild()
+    }
+  })
 
   // TODO: destroys game instance on refresh...is this what we want??!?
   scope.$on('$destroy', () => {
@@ -548,7 +555,7 @@ window.createGame = function (ele, scope, players, mapId, injector) {
 }
 
 // custom directive to link phaser object to angular
-app.directive('gameCanvas', function ($injector) {
+app.directive('gameCanvas', function ($injector, MenuFactory) {
   return {
     scope: {
       data: '=',
@@ -556,9 +563,9 @@ app.directive('gameCanvas', function ($injector) {
     },
     template: '<div id="game-canvas"></div>',
     link: function (scope, ele, attrs) {
-      // TODO: FIX THIS FOR REFRESHES!
+      // condition for state transition into game view
       if (scope.data) {
-        window.createGame(ele, scope, scope.players, scope.mapId, $injector)
+        window.createGame(ele, scope, scope.players, scope.mapId, $injector, MenuFactory)
       }
     }
   }
