@@ -10,6 +10,11 @@ window.createGame = function (ele, scope, players, mapId, injector) {
   // My parent div is phaser-example
   // My preload function is titled preload, create: create, update: update, and render: render
 
+  // TODO: destroys game instance on refresh...is this what we want??!?
+  scope.$on('$destroy', () => {
+    game.destroy()
+  })
+
   function preload () {
     game.stage.backgroundColor = '#76bcbb'
     // game.load.image('mushroom', 'pimages/star.png')
@@ -543,7 +548,6 @@ window.createGame = function (ele, scope, players, mapId, injector) {
 }
 
 // custom directive to link phaser object to angular
-
 app.directive('gameCanvas', function ($injector) {
   return {
     scope: {
@@ -552,8 +556,6 @@ app.directive('gameCanvas', function ($injector) {
     },
     template: '<div id="game-canvas"></div>',
     link: function (scope, ele, attrs) {
-      console.log('inside link function: ', scope.data)
-
       // TODO: FIX THIS FOR REFRESHES!
       if (scope.data) {
         window.createGame(ele, scope, scope.players, scope.mapId, $injector)

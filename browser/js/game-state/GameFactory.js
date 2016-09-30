@@ -3,6 +3,7 @@
 app.factory('GameFactory', function ($http) {
   let GameFactory = {}
   let gameState = null
+  let showMenu = false
 
   // gets game state object from db upon user login
   GameFactory.getUserState = () => {
@@ -21,6 +22,13 @@ app.factory('GameFactory', function ($http) {
   GameFactory.clearUserState = () => {
     gameState = null
   }
+
+  // displaying/hiding in-game menu
+  GameFactory.showMenu = () => {
+    showMenu = !showMenu
+  }
+
+  GameFactory.getMenuView = () => showMenu
 
   return GameFactory
 })
