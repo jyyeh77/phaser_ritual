@@ -28,6 +28,7 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
     game.load.tilemap('map', 'pmaps/bunkerv1.json', null, Phaser.Tilemap.TILED_JSON)
     game.load.image('tiles', 'pmaps/tmw_desert_spacing.png')
     game.load.image('tiles2', 'pmaps/sewer_tileset.png')
+    game.load.image('tiles3', 'pmaps/scifi1.png')
     game.load.spritesheet('player', 'pimages/dude.png', 32, 48)
   }
   // Set bg color behind all elements in this frame
@@ -43,7 +44,7 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
   var camVelY = 0
   var camMaxSpeed = 80
   var map
-  var layer, layer2, layer3, layer4
+  var layer, layer2, layer3, layer4, layer5
   var tile
   var log
   // var tileUp = false
@@ -65,10 +66,12 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
     map = game.add.tilemap('map')
     map.addTilesetImage('bunkerv2', 'tiles')
     map.addTilesetImage('sewer_tileset', 'tiles2')
+    map.addTilesetImage('scifi1', 'tiles3')
     layer3 = map.createLayer('Bounds')
     layer = map.createLayer('Ground')
     layer2 = map.createLayer('Bunker')
     layer4 = map.createLayer('Interactive')
+    layer5 = map.createLayer('Upgrades')
     // Add all the elements we preloaded.
     // The tilemap has layers - the bunker, its bg, and what the player collides with - check out Tiled
     game.world.setBounds(0, 0, 960, 3040)
@@ -84,9 +87,16 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
     // What happens when i move the mouse? Add a listener and bind this
 
     map.setCollision(55, true, layer3)
-    map.setCollision(64, false, layer4)
+
+    // Door Collisions
     map.setTileIndexCallback(64, moveDown, this, layer4)
     map.setTileIndexCallback(65, moveUp, this, layer4)
+
+    // Upgrade Collisions
+    map.setTileIndexCallback(93, compOne, this, layer5)
+    map.setTileIndexCallback(94, compTwo, this, layer5)
+    map.setTileIndexCallback(95, compThree, this, layer5)
+
     // OKAY understandably confusing if you are not familiar with game design.
     // The engine is running a collision engine. The TLDR is that velocity is set to 0 upon interaction with above.
     // 55 is the EXACT tile this applies to.
@@ -114,7 +124,7 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
     game.inputEnabled = true
 
     // TODO: PUT ANY FUNCTION HERE - will activate on any click of wall
-    game.input.onDown.add(tryBuild, this)
+    game.input.onDown.add(getTileProperties, this)
     // OKAY - input enabled is 1/2 things for touch enabled. May not work yet.
     // game.input = mouse
     // onDown = event
@@ -146,7 +156,7 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
 
     leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT)
     rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT)
-    // Alias keys - didnt work otherwise, dont ask.
+  // Alias keys - didnt work otherwise, dont ask.
   }
 
   function update () {
@@ -167,7 +177,7 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
       // by this much
 
       player.animations.play('left')
-      // animate this
+    // animate this
     } else {
       if (rightKey.isDown) {
         //  Move to the right
@@ -175,37 +185,37 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
         // by this much
 
         player.animations.play('right')
-        // animate this
+      // animate this
       } else {
         player.animations.stop()
         // otherwise, standstill
 
         player.frame = 4
-        // at this frame
+      // at this frame
       }
     }
     if (cursors.up.isDown) {
       // Move world up
       game.camera.y -= 4
-      // by this much
+    // by this much
     } else {
       if (cursors.down.isDown) {
         // move world down
         game.camera.y += 4
-        // by this much
+      // by this much
       }
     }
     drag_camera(game.input.mousePointer)
     drag_camera(game.input.pointer1)
     update_camera()
-    // Monitor mouse/touch world movement
+  // Monitor mouse/touch world movement
   }
 
   function render () {
     game.debug.cameraInfo(game.camera, 32, 32)
     // Show camera info
     game.debug.text('Tile Info: ' + log, 32, 570)
-    // Show selected tile
+  // Show selected tile
   }
 
   function tryBuild (aFloor) {
@@ -257,13 +267,13 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
       let vCurRow = []
       let cCurRow = []
       let iCurRow = []
-      // let uCurRow = []
+      let uCurRow = []
       for (let curX = 0; curX < 30; curX++) {
         let bgTile = map.getTile(curX, curY, layer)
         let vTile = map.getTile(curX, curY, layer2)
         let cTile = map.getTile(curX, curY, layer3)
         let iTile = map.getTile(curX, curY, layer4)
-        // let uTile = map.getTile(curX, curY, layer5)
+        let uTile = map.getTile(curX, curY, layer5)
 
         if (bgTile !== null) {
           bgCurRow.push(bgTile.index)
@@ -291,20 +301,18 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
         } else {
           iCurRow.push(0)
         }
-
-        /*
-         if(uTile !== null) {
-         uCurRow.push(bgTile.index)
-         } else {
-         uCurRow.push(0)
-         }
-         */
+        if (uTile !== null) {
+          uCurRow.push(bgTile.index)
+          console.log('!!! U Tile Saved.')
+        } else {
+          uCurRow.push(0)
+        }
       }
       saveObj.bg.push(bgCurRow)
       saveObj.visual.push(vCurRow)
       saveObj.collision.push(cCurRow)
       saveObj.interactive.push(iCurRow)
-      // saveObj.upgrades.push(uCurRow)
+      saveObj.upgrades.push(uCurRow)
     }
     console.log(saveObj)
     return saveObj
@@ -327,12 +335,9 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
         if (map.getTile(curX, curY, layer4) !== null) {
           map.removeTile(curX, curY, layer4).destroy()
         }
-        /*
-         if(map.getTile(curX, curY, layer5) !== null) {
-         map.removeTile(curX, curY, layer5).destroy()
-         }
-         */
-        // map.putTile(nextTile, tileR.x, tileR.y, layer3)
+        if (map.getTile(curX, curY, layer5) !== null) {
+          map.removeTile(curX, curY, layer5).destroy()
+        }
       }
     }
     console.log('Cleared Bunker!')
@@ -358,12 +363,9 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
         if (saveData.interactive[actY][curX] !== 0) {
           map.putTile(saveData.interactive[actY][curX], curX, curY, layer4)
         }
-
-        /*
-         if(saveData.upgrades[actY][curX] !== 0) {
-         map.putTile(saveData.upgrades[actY][curX], curX, curY, layer5)
-         }
-         */
+        if (saveData.upgrades[actY][curX] !== 0) {
+          map.putTile(saveData.upgrades[actY][curX], curX, curY, layer5)
+        }
       }
     }
     console.log('Loaded Bunker!')
@@ -402,6 +404,17 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
       [0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0], // 6
       [0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0], // 7
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] // 8
+    ],
+    upgrades: [
+      // Y GRID
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // 1
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // 2
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // 3
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // 4
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // 5
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // 6
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // 7
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] // 8
     ]
   }
 
@@ -427,13 +440,13 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
           if (objectOfMatrices.visual[actY][actX] !== 0) {
             // Add a tile to this (non-displaced) location, and on proper layer.
             map.putTile(objectOfMatrices.visual[actY][actX], actX, curY - 1, layer2)
-            // console.log('Placing a visual tile @ ' + curX + ',' + curY)
+          // console.log('Placing a visual tile @ ' + curX + ',' + curY)
           }
           // COLLISION
           if (objectOfMatrices.collision[actY][actX] !== 0) {
             // Add a tile to this (non-displaced) location, and on proper layer.
             map.putTile(objectOfMatrices.collision[actY][actX], actX, curY - 1, layer3)
-            // console.log('Placing a collision tile @ ' + curX + ',' + curY)
+          // console.log('Placing a collision tile @ ' + curX + ',' + curY)
           }
           // INTERACTIVE
           if (objectOfMatrices.interactive[actY][actX] !== 0) {
@@ -456,13 +469,11 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
               }
             }
           }
-          /*
-           //UPGRADES
-           if(objectOfMatrices.upgrades[actY][curX] !== 0) {
-           //Add a tile to this (non-displaced) location, and on proper layer.
-           map.putTile(objectOfMatrices.upgrades[actY][actX], curX, curY, layer5)
-           }
-           */
+          // UPGRADES
+          if (objectOfMatrices.upgrades[actY][curX] !== 0) {
+            // Add a tile to this (non-displaced) location, and on proper layer.
+            map.putTile(objectOfMatrices.upgrades[actY][actX], curX, curY, layer5)
+          }
         }
       }
       currentFloors = currentFloors + 1
@@ -483,24 +494,24 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
       if (o_camera) {
         camVelX = (o_camera.x - o_pointer.position.x) * cameraAccel
         camVelY = (o_camera.y - o_pointer.position.y) * cameraAccel
-        // Figure out diff - multiply by accel
+      // Figure out diff - multiply by accel
       }
       o_camera = o_pointer.position.clone()
-      // else were the same mofucka
+    // else were the same mofucka
     }
 
     if (o_pointer.isUp) {
       o_camera = null
     }
-    // If nothings going on, no deal
+  // If nothings going on, no deal
   }
 
   function getTileProperties () {
-    var x = layer2.getTileX(game.input.activePointer.worldX)
-    var y = layer2.getTileY(game.input.activePointer.worldY)
+    var x = layer5.getTileX(game.input.activePointer.worldX)
+    var y = layer5.getTileY(game.input.activePointer.worldY)
     // find the tile location based on mouse location (diff x, y vals)
 
-    tile = map.getTile(x, y, layer2)
+    tile = map.getTile(x, y, layer5)
     // Grab tile objects based on these
     console.log(tile)
     log = tile.index
