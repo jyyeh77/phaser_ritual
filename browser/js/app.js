@@ -1,8 +1,6 @@
 'use strict'
 window.app = angular.module('Apocalypse', ['fsaPreBuilt', 'ui.router', 'ui.bootstrap', 'ngAnimate'])
 
-navigator.geolocation.getCurrentPosition(alert, alert)
-
 app.config(function ($urlRouterProvider, $locationProvider) {
   // This turns off hashbang urls (/#about) and changes it to something normal (/about)
   $locationProvider.html5Mode(true)
