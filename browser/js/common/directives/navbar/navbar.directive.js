@@ -1,13 +1,19 @@
-app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, $state, GameFactory) {
+app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, $state, GameViewFactory) {
   return {
     restrict: 'E',
     scope: {},
     templateUrl: 'js/common/directives/navbar/navbar.html',
     link: function (scope) {
       scope.items = [
-        {label: 'Account Settings', state: 'master.navbar.signup-settings', auth: true},
-        {label: 'Tasks', state: 'master.navbar.tasks', auth: true}
+        {label: 'Game', state: 'master.navbar.game', auth: true},
+        {label: 'Account', state: 'master.navbar.signup-settings', auth: true}
       ]
+
+      // displaying in-game menu
+      scope.showMenu = () => {
+        console.log('CALLING SHOW MENU!')
+        GameViewFactory.showMenu()
+      }
 
       scope.user = null
 
@@ -26,7 +32,9 @@ app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, 
       var setUser = function () {
         AuthService.getLoggedInUser().then(function (user) {
           scope.user = user
-          GameFactory.getUserState()
+          console.log('set user getting called!', user)
+          // get game state associated with user
+          GameViewFactory.getUserState()
         })
       }
 
