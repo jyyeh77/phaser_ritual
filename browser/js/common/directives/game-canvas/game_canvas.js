@@ -563,6 +563,15 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
 
     return value
   }
+
+  function compOne () {
+  }
+
+  function compTwo () {
+  }
+
+  function compThree () {
+  }
 }
 
 // custom directive to link phaser object to angular
