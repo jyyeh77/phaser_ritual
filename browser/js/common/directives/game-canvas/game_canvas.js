@@ -50,7 +50,7 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
   // var tileUp = false
   var player
   var marker
-  var leftKey, rightKey
+  var leftKey, rightKey, upKey, downKey, useKey
   var totalFloor = 3
   var currentFloors = 1
   var builtFloor = false
@@ -154,8 +154,11 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
     player.animations.add('right', [5, 6, 7, 8], 10, true)
     // Name animation, what frames is this animation, at what FPS, do I idle otherwise?
 
-    leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT)
-    rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT)
+    upKey = game.input.keyboard.addKey(Phaser.Keyboard.W)
+    downKey = game.input.keyboard.addKey(Phaser.Keyboard.S)
+    leftKey = game.input.keyboard.addKey(Phaser.Keyboard.A)
+    rightKey = game.input.keyboard.addKey(Phaser.Keyboard.D)
+    useKey = game.input.keyboard.addKey(Phaser.Keyboard.E)
   // Alias keys - didnt work otherwise, dont ask.
   }
 
@@ -194,12 +197,12 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
       // at this frame
       }
     }
-    if (cursors.up.isDown) {
+    if (upKey.isDown) {
       // Move world up
       game.camera.y -= 4
     // by this much
     } else {
-      if (cursors.down.isDown) {
+      if (downKey.isDown) {
         // move world down
         game.camera.y += 4
       // by this much
@@ -565,12 +568,18 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
   }
 
   function compOne () {
+    if (useKey.isDown) {
+    }
   }
 
   function compTwo () {
+    if (useKey.isDown) {
+    }
   }
 
   function compThree () {
+    if (useKey.isDown) {
+    }
   }
 }
 
