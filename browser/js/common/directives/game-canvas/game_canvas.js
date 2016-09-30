@@ -165,7 +165,8 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
   function update () {
     game.physics.arcade.collide(player, layer3)
     game.physics.arcade.collide(player, layer4)
-    // The only layer of the map i collide with is layer 3 - and based on above - tile 55 of layer 3
+    game.physics.arcade.collide(player, layer5)
+
     player.body.velocity.x = 0
     // Every 1/60 frame, reset x velocity
 
@@ -569,16 +570,19 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
 
   function compOne () {
     if (useKey.isDown) {
+      console.log('Computer One Activated.')
     }
   }
 
   function compTwo () {
     if (useKey.isDown) {
+      console.log('Computer Two Activited')
     }
   }
 
   function compThree () {
     if (useKey.isDown) {
+      console.log('Computer Three Activated')
     }
   }
 }
